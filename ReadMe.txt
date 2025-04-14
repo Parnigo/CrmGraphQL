@@ -12,6 +12,12 @@ npm run dev
 FOR CHATGPT
 Request ES6+ style code
 
+Git stuff
+Build Git on Server (do this from the directory you want to have the repository)
+git clone https://github.com/Parnigo/CrmGraphQL
+Refresh:
+git fetch https://github.com/Parnigo/CrmGraphQL
+
 also... 
 Perfect — once research is available again, I’ll show you how to configure Yoga’s built-in GraphiQL UI to automatically inject the JWT from localStorage into all GraphQL requests.
 In the meantime, your entire backend setup is ready to go. Let me know if you want help with token refresh, role-based access, or expanding your schema next!
