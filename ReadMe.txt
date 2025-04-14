@@ -16,7 +16,7 @@ Git stuff
 Build Git on Server (do this from the directory you want to have the repository)
 git clone https://github.com/Parnigo/CrmGraphQL
 Refresh:
-git fetch https://github.com/Parnigo/CrmGraphQL
+git pull https://github.com/Parnigo/CrmGraphQL
 
 also... 
 Perfect — once research is available again, I’ll show you how to configure Yoga’s built-in GraphiQL UI to automatically inject the JWT from localStorage into all GraphQL requests.
