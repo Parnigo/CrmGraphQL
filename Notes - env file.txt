@@ -1,0 +1,16 @@
+
+Install dotenv in your project:
+npm install dotenv
+
+Load the .env in your entry files, like app.js and server.js: Add this at the very top:
+require('dotenv').config();
+
+Access variables like this:
+process.env.DB_USER
+process.env.JWT_SECRET
+
+Don’t commit .env to version control—add this line to your .gitignore:
+.env
+
+On Synology NAS, store .env outside of your public/ web-accessible directories. Keep it next to your server.js or even in a secure volume if using Docker.
+

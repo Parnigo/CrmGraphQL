@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GraphQL Dashboard</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    #result { white-space: pre-wrap; background: #f0f0f0; padding: 1rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>GraphQL Dashboard</h1>
+
+  <div id="login-section">
+    <h2>Login</h2>
+    <form id="login-form">
+      <label>Username: <input type="text" id="username" required /></label><br />
+      <label>Password: <input type="password" id="password" required /></label><br />
+      <button type="submit">Login</button>
+    </form>
+    <div id="login-error" style="color: red;"></div>
+  </div>
+
+  <div id="graphql-section" style="display: none;">
+    <h2>GraphQL Query</h2>
+    <textarea id="query" rows="6" cols="60">{ users { username email } }</textarea><br />
+    <button onclick="runQuery()">Run Query</button>
+    <button onclick="logout()">Logout</button>
+    <h3>Result:</h3>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('authToken');
+    const loginSection = document.getElementById('login-section');
+    const graphqlSection = document.getElementById('graphql-section');
+    const resultDiv = document.getElementById('result');
+
+    if (token) {
+      loginSection.style.display = 'none';
+      graphqlSection.style.display = 'block';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          document.getElementById('login-error').textContent = errorText;
+          return;
+        }
+
+        const data = await res.json();
+        localStorage.setItem('authToken', data.token);
+        location.reload(); // Refresh to load the query section
+      } catch (err) {
+        console.error(err);
+        document.getElementById('login-error').textContent = 'Network error';
+      }
+    });
+
+    async function runQuery() {
+      const query = document.getElementById('query').value;
+      const token = localStorage.getItem('authToken');
+
+      const res = await fetch('/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      const result = await res.json();
+      resultDiv.textContent = JSON.stringify(result, null, 2);
+    }
+
+    function logout() {
+      localStorage.removeItem('authToken');
+      location.reload();
+    }
+  </script>
+</body>
+</html>

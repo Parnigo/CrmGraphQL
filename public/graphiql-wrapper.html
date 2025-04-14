@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>GraphiQL</title>
+  <link rel="stylesheet" href="https://unpkg.com/graphiql/graphiql.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+    #logout {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      background: #eee;
+      padding: 6px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      color: #333;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <a id="logout" href="/logout">Logout</a>
+  <div id="graphiql" style="height: 100vh;"></div>
+
+  <!-- Load dependencies in the correct order -->
+  <script src="https://unpkg.com/react/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/graphiql/graphiql.min.js"></script>
+
+  <script>
+    const token = localStorage.getItem('token');
+
+    const fetcher = (graphQLParams) => {
+      return fetch('/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(graphQLParams)
+      }).then(response => response.json());
+    };
+
+    ReactDOM.render(
+      React.createElement(GraphiQL, { fetcher }),
+      document.getElementById('graphiql')
+    );
+  </script>
+</body>
+</html>

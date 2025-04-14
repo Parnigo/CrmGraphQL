@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  parnigo-crm:
+    build: .
+    container_name: parnigo-crm
+    restart: on-failure:5
+    network_mode: host
+    # In host mode, the container uses the host’s network stack,
+    # so explicit port mappings are not necessary.
+    # ports:
+    #   - "4000:4000"
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
